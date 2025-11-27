@@ -73,7 +73,7 @@ void printPlayerStatus(void)
 {
 	int i;
 	for	(i=0; i<smm_player_nr; i++) {
-		printf("%s - position : %i(%s), credit : %i, energy : %i\n", smm_players[i].name, smm_players[i].pos, smmObj_getNodeName(smm_players[node_nr].pos), smm_players[i].credit, smm_players[i].energy);	
+		printf("%s - position : %i(%s), credit : %i, energy : %i\n", smm_players[i].name, smm_players[i].pos, smmObj_getNodeName(smm_players[i].pos), smm_players[i].credit, smm_players[i].energy);	
 	}
 }
 
@@ -86,7 +86,7 @@ void generatePlayers(int n, int initEnergy) //generate a new player
 		smm_players[i].energy = initEnergy;
 		smm_players[i].flag_graduated = 0;
 		
-		printf("Input %i-th player name : ");
+		printf("Input %i-th player name : ", i);
 		scanf ("%s", &smm_players[i].name);
 		fflush(stdin);		
 	}
@@ -163,9 +163,9 @@ int main(int argc, const char * argv[]) {
     int cnt;
     int turn;
     
-    board_nr = 0;
-    food_nr = 0;
-    festival_nr = 0;
+    smm_board_nr = 0;
+    smm_food_nr = 0;
+    smm_festival_nr = 0;
     
     srand(time(NULL));
     
@@ -183,11 +183,11 @@ int main(int argc, const char * argv[]) {
     while ( fscanf(fp, "%s %i %i %i", name, &type, &credit, &energy) == 4 ) //read a node parameter set
     {
         //store the parameter set
-        //printf("%s %i %i %i\n", name, type, credit, energy);
-        board_nr = smmObj_genNode(name, type, credit, energy);
+        printf("%s %i %i %i\n", name, type, credit, energy);
+        smm_board_nr = smmObj_genNode(name, type, credit, energy);
     }
     fclose(fp);
-    printf("Total number of board nodes : %i\n", board_nr);
+    printf("Total number of board nodes : %i\n", smm_board_nr);
     
     
 #if 0
@@ -204,7 +204,7 @@ int main(int argc, const char * argv[]) {
         //store the parameter set
     }
     fclose(fp);
-    printf("Total number of food cards : %i\n", food_nr);
+    printf("Total number of food cards : %i\n", smm_food_nr);
   
     
     
@@ -231,17 +231,17 @@ int main(int argc, const char * argv[]) {
     {
         //input player number to player_nr
         printf("Input player number : ");
-		scanf("%i", &player_nr);
+		scanf("%i", &smm_player_nr);
         fflush(stdin);
         
-        if (player_nr <= 0 || player_nr > MAX_PLAYER)
+        if (smm_player_nr <= 0 || smm_player_nr > MAX_PLAYER)
         	printf("Invalid player number!\n");
     }
-    while (player_nr <= 0 || player_nr > MAX_PLAYER);
+    while (smm_player_nr <= 0 || smm_player_nr > MAX_PLAYER);
     
     
     
-    generatePlayers(player_nr, smmObj_getNodeEnergy(0));
+    generatePlayers(smm_player_nr, smmObj_getNodeEnergy(0));
     
 
 
@@ -266,7 +266,7 @@ int main(int argc, const char * argv[]) {
         actionNode(turn);
         
         //4-5. next turn       
-		turn = (turn + 1)%player_nr;
+		turn = (turn + 1)%smm_player_nr;
     }
 
     system("PAUSE");
